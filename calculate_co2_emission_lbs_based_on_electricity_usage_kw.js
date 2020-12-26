@@ -7,4 +7,4 @@ class CalculateCo2EmissionLbsBasedOnElectricityUsageKw {
   }
 }
 
-module.exports = CalculateElectricityUsageKwBasedOnCpuUsage
+module.exports = CalculateCo2EmissionLbsBasedOnElectricityUsageKw
