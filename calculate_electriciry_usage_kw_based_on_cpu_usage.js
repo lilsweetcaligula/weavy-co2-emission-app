@@ -7,7 +7,7 @@ class CalculateElectricityUsageKwBasedOnCpuUsage {
     const { cpuMaxElectricityUsageKw } = CalculateElectricityUsageKwBasedOnCpuUsage
     const max_el_usage = await cpuMaxElectricityUsageKw()
 
-    return cpu_usage * max_el_usage // NOTE: It's just a mock for now.
+    return cpu_usage / 100.0 * max_el_usage
   }
   
   static async cpuMaxElectricityUsageKw() {

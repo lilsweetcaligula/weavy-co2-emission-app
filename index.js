@@ -32,6 +32,10 @@ const CalculateCo2EmissionLbsBasedOnElectricityUsageKw = require('./calculate_co
   })()
 
 
-  console.dir(co2_em_infos, { depth: 4 })
+  const total_co2_em = co2_em_infos
+    .map(info => prop(info, 'co2_emission_lbs'))
+    .reduce((x, y) => x + y, 0)
+
+  console.log('%d lbs', total_co2_em)
 })()
 
