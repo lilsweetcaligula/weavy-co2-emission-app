@@ -3,6 +3,6 @@ const { prop, setProp } = require('./functools')
 const App = require('./app')
 
 ; (async () => {
-  await App.invoke({})
+  await App.invoke({ output: 'json' })
 })()
 
