@@ -3,9 +3,12 @@ const { prop, setProp } = require('./functools')
 const GetCpuUsageByProcs = require('./get_cpu_usage_by_procs')
 const CalculateElectricityUsageKwBasedOnCpuUsage = require('./calculate_electricity_usage_kw_based_on_cpu_usage.js')
 const CalculateCo2EmissionLbsBasedOnElectricityUsageKw = require('./calculate_co2_emission_lbs_based_on_electricity_usage_kw')
+const OutputAppResult = require('./output_app_result')
 
 class App {
-  static async invoke(_params) {
+  static async invoke(opts = {}) {
+    Assert.object(opts, 'opts')
+
     const cpu_usage_infos = await GetCpuUsageByProcs.invoke({}) // [{ pid: 123, cpu: 0.31 }, ...]
 
 
@@ -33,11 +36,7 @@ class App {
     })()
 
 
-    const total_co2_em = co2_em_infos
-      .map(info => prop(info, 'co2_emission_lbs'))
-      .reduce((x, y) => x + y, 0)
-
-    console.log('%d lbs', total_co2_em)
+    await OutputAppResult.invoke(co2_em_infos, opts)
   }
 }
 

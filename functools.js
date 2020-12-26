@@ -20,6 +20,15 @@ class Functools {
     Assert.object(o, 'o')
     return { ...o, [name]: value }
   }
+
+  static sliceExn(obj, cols) {
+    Assert.object(obj, 'obj')
+    Assert.array(cols, 'cols')
+
+    const { prop, setProp } = Functools
+
+    return cols.reduce((o, col) => setProp(o, col, prop(obj, col)), {})
+  }
 }
 
 module.exports = Functools
