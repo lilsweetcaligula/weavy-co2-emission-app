@@ -3,6 +3,8 @@ const { AssertionError } = Assert
 
 class Functools {
   static prop(o, name, assertType = x => x) {
+    Assert.object(o, 'o')
+
     if (!(name in o)) {
       throw new AssertionError(`o["${name}"]`)
     }
@@ -15,10 +17,8 @@ class Functools {
   }
 
   static setProp(o, name, value) {
-    return Object.defineProperty(o, name, {
-      value,
-      writable: true
-    })
+    Assert.object(o, 'o')
+    return { ...o, [name]: value }
   }
 }
 
