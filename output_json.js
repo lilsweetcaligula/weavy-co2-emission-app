@@ -17,7 +17,7 @@ class OutputJson {
       return
     }
 
-    console.log(JSON.stringify(item))
+    console.log(JSON.stringify(x))
   }
 }
 
