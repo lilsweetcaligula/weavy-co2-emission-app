@@ -1,7 +1,7 @@
 const Assert = require('assert-plus')
 const { prop, setProp } = require('./functools')
 const GetCpuUsageByProcs = require('./get_cpu_usage_by_procs')
-const CalculateElectricityUsageKwBasedOnCpuUsage = require('./calculate_electriciry_usage_kw_based_on_cpu_usage')
+const CalculateElectricityUsageKwBasedOnCpuUsage = require('./calculate_electricity_usage_kw_based_on_cpu_usage.js')
 const CalculateCo2EmissionLbsBasedOnElectricityUsageKw = require('./calculate_co2_emission_lbs_based_on_electricity_usage_kw')
 
 ; (async () => {
