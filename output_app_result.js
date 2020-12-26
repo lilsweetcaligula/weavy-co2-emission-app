@@ -1,23 +1,27 @@
 const Assert = require('assert-plus')
-const OutputJson = require('./output_json')
-const OutputCsv = require('./output_csv')
+const OutputAppListing = require('./output_app_listing')
+const OutputAppTotals = require('./output_app_totals')
 const { prop, setProp } = require('./functools')
 
 class OutputAppResult {
-  static async invoke(x, opts) {
-    const printer = (() => {
-      const out = prop(opts, 'output')
+  static async invoke(result, opts) {
+    Assert.object(opts, 'opts')
 
-      switch (out) {
-        case 'json': return OutputJson
-        case 'csv': return OutputCsv
-        default: throw new Error(`The "${out}" format is not supported.`)
-      }
-    })()
+    if (opts.totals_only) {
+      const cols = ['cpu', 'co2_emission_lbs']
 
-    await printer.invoke(x, {
-      columns: ['pid', 'cpu', 'co2_emission_lbs']
-    })
+      const totals = cols.reduce((o, col) => {
+        const value = result
+          .map(info => prop(info, col))
+          .reduce((x, y) => x + y, 0)
+
+        return setProp(o, col, value)
+      }, {})
+
+      await OutputAppTotals.invoke(totals, opts)
+    } else {
+      await OutputAppListing.invoke(result, opts)
+    }
   }
 }
 
