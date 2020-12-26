@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "assert-plus": "1.0.0",
+    "minimist": "1.2.5",
     "ps-list": "7.2.0"
   }
 }
