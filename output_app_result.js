@@ -9,17 +9,7 @@ class OutputAppResult {
     Assert.object(opts, 'opts')
 
     if (opts.totals_only) {
-      const cols = ['cpu', 'co2_emission_lbs']
-
-      const totals = cols.reduce((o, col) => {
-        const value = result
-          .map(info => prop(info, col))
-          .reduce((x, y) => x + y, 0)
-
-        return setProp(o, col, value)
-      }, {})
-
-      await OutputAppTotals.invoke(totals, opts)
+      await OutputAppTotals.invoke(result, opts)
     } else {
       await OutputAppListing.invoke(result, opts)
     }
@@ -28,13 +18,26 @@ class OutputAppResult {
 
 class OutputAppTotals {
   static async invoke(x, opts) {
+    const SUPPORTED_COLUMNS = ['cpu', 'electricity_usage_kw', 'co2_emission_lbs']
+
     const columns = getSupportedColumnsBasedOnOpts({
-      supported_columns: ['cpu', 'co2_emission_lbs']
+      supported_columns: SUPPORTED_COLUMNS
     }, opts)
+
+
+    const result = Array.isArray(x) ? x : [x]
+
+    const totals = columns.reduce((o, col) => {
+      const value = result
+        .map(info => prop(info, col))
+        .reduce((x, y) => x + y, 0)
+
+      return setProp(o, col, value)
+    }, {})
 
     const printer = getPrinterBasedOnOpts(opts)
 
-    await printer.invoke(x, { columns })
+    await printer.invoke(totals, { columns })
   }
 }
 
