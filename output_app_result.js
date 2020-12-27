@@ -46,11 +46,11 @@ class OutputAppListing {
       supported_columns: SUPPORTED_COLUMNS
     }, opts)
 
-    const printer = getPrinterBasedOnOpts(opts)
-
     const sorter = getSorterBasedOnOpts({
       supported_columns: SUPPORTED_COLUMNS
     }, opts)
+
+    const printer = getPrinterBasedOnOpts(opts)
 
     await printer.invoke(sorter(x), { columns })
   }
@@ -89,8 +89,16 @@ function getSorterBasedOnOpts(params, opts) {
 
   return x => {
     if (Array.isArray(x)) {
-      const sort_by = opts.sort_by || []
-      Assert.array(sort_by, 'opts.sort_by')
+      const sort_by =
+        (prop(opts, 'sort_by', Assert.array) || [])
+          .filter(info => {
+            Assert.array(info, 'info')
+            Assert(info.length >= 2, 'info.length >= 2')
+
+            const [col,] = info
+
+            return supported_columns.includes(col)
+          })
 
       if (sort_by.length === 0) {
         return x
