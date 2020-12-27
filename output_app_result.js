@@ -40,13 +40,19 @@ class OutputAppTotals {
 
 class OutputAppListing {
   static async invoke(x, opts) {
+    const SUPPORTED_COLUMNS = ['pid', 'cpu', 'co2_emission_lbs']
+
     const columns = getSupportedColumnsBasedOnOpts({
-      supported_columns: ['pid', 'cpu', 'co2_emission_lbs']
+      supported_columns: SUPPORTED_COLUMNS
     }, opts)
 
     const printer = getPrinterBasedOnOpts(opts)
 
-    await printer.invoke(x, { columns })
+    const sorter = getSorterBasedOnOpts({
+      supported_columns: SUPPORTED_COLUMNS
+    }, opts)
+
+    await printer.invoke(sorter(x), { columns })
   }
 }
 
@@ -73,6 +79,52 @@ function getSupportedColumnsBasedOnOpts(params, opts) {
   return supported_columns.filter(supported_col => {
     return requested_columns.includes(supported_col)
   })
+}
+
+function getSorterBasedOnOpts(params, opts) {
+  Assert.object(params, 'params')
+  Assert.object(opts, 'opts')
+
+  const supported_columns = prop(params, 'supported_columns')
+
+  return x => {
+    if (Array.isArray(x)) {
+      const sort_by = opts.sort_by || []
+      Assert.array(sort_by, 'opts.sort_by')
+
+      if (sort_by.length === 0) {
+        return x
+      }
+
+      const defaultComparer = (x, y) => {
+        if (x < y) return -1
+        if (x > y) return 1
+        return 0
+      }
+
+      const comparer = sort_by.reduce((f, info) => {
+        Assert.array(info, 'info')
+
+        const [col, order,] = info
+
+        return (a, b) => {
+          const cmp = f(a, b)
+
+          if (cmp !== 0) {
+            return cmp
+          }
+
+          const order_modifier = order.toLowerCase() === 'desc' ? -1 : 1
+
+          return order_modifier * defaultComparer(prop(a, col), prop(b, col))
+        }
+      }, defaultComparer)
+
+      return [...x].sort(comparer)
+    }
+
+    return x
+  }
 }
 
 module.exports = OutputAppResult
