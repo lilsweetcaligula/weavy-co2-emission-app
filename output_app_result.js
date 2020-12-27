@@ -40,7 +40,7 @@ class OutputAppTotals {
 
 class OutputAppListing {
   static async invoke(x, opts) {
-    const SUPPORTED_COLUMNS = ['pid', 'cpu', 'co2_emission_lbs']
+    const SUPPORTED_COLUMNS = ['pid', 'cpu', 'electricity_usage_kw', 'co2_emission_lbs']
 
     const columns = getSupportedColumnsBasedOnOpts({
       supported_columns: SUPPORTED_COLUMNS
