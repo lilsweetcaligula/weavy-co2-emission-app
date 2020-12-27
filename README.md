@@ -1,6 +1,6 @@
 # weavy-co2-emission-app
 
-This application will calculate CO2 emission per process. Clone this repo then cange into the repo's directory to play around.
+This application will calculate CO2 emission per process. Clone this repo then change into the repo's directory to play around.
 
 ## Pre-requisites:
 
