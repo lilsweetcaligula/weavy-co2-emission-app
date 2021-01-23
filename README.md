@@ -6,6 +6,9 @@ This application will calculate CO2 emission per process. Clone this repo then c
 
 I am assuming you have Node.js 10 or higher installed. It should work for Node.js 8 but, alas, I haven't tested it.
 
+## Installation:
+Clone the repo, `cd` into the directory, and run `npm install`. Now you are all set!
+
 ## Basic usage
 
 By default it works something like this:
